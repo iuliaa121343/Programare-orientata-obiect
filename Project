@@ -1,0 +1,248 @@
+#include<iostream>
+#include<string>
+#include<cstring>
+#include<fstream>
+using namespace std;
+#define CRT_SECURE_NO_WARNINGS
+class universitate {
+private:
+	//atributele clasei
+	const string nume;
+	int nrstudenti = 0;
+	int* NrSerii = nullptr;
+	float* burseAlocate = nullptr;
+	int nrDosareAprobat = 0;
+	char* locatie=nullptr;
+public:
+	//constructor fara parametri
+	//atributele sunt pt obiect parametri
+	universitate() :nume("necunoscut") {
+
+	}
+	//constructor cu toti parametri
+	universitate(string numeA, int nrstudenti, const char* locatie, int nrDosareAprobate,const int* NrSerii, const float* burseAlocate) :nume(numeA) {
+		this->nrstudenti = nrstudenti;
+		this->nrDosareAprobat = nrDosareAprobate;
+		if (this->NrSerii != nullptr) {
+			this->NrSerii = new int[this->nrstudenti];
+			for (int i = 0; i < this->nrstudenti; i++) {
+				this->NrSerii[i] = NrSerii[i];
+			}
+		}
+		if (this->burseAlocate != nullptr) {
+			this->burseAlocate = new float[this->nrDosareAprobat];
+			for (int i = 0; i < this->nrDosareAprobat; i++) {
+				this->burseAlocate[i] = burseAlocate[i];
+			}
+		}
+		if (this->locatie != nullptr) {
+			this->locatie = new char[strlen(locatie) + 1];
+			memcpy(this->locatie, locatie, strlen(locatie) + 1);
+		}
+	}
+	//destructor
+	~universitate() {
+
+		delete[] this->NrSerii;
+
+		delete[] this->burseAlocate;
+
+		delete[] this->locatie;
+
+	}
+	//metoda afisare
+
+		void afisare() {
+			cout << endl << endl << "Nume:" << this->nume;
+			cout << endl << "Numar Studenti:" << this->nrstudenti;
+			cout << endl << "Dosare de burse alocate:" << this->nrDosareAprobat;
+
+			if (this->burseAlocate != nullptr) {
+				for (int i = 0; i < this->nrDosareAprobat; i++) {
+					cout << endl << "Suma totala din buget alocata burselor lunare: " << this->burseAlocate[i];
+				}
+			}
+			else {
+				cout << endl << "Vector burse alocate e gol.";
+			}
+
+			if (this->NrSerii != nullptr) {
+				for (int i = 0; i < this->nrstudenti; i++) {
+					cout << endl << "Numar de serii:" << this->NrSerii[i];
+				}
+			}
+			else {
+				cout << endl << "Vector nrstudenti e gol.";
+			}
+
+			if (this->locatie != nullptr) {
+				cout << endl << "Locatie:" << this->locatie;
+			}
+			else {
+				cout << endl << "Locatie e null.";
+			}
+		}
+	
+	
+	//copy constructor
+	//& daca dorim sa modifice ceva din clasa
+	universitate(const universitate& copie) :nume(copie.nume) {
+		this->nrstudenti = copie.nrstudenti;
+		this->nrDosareAprobat = copie.nrDosareAprobat;
+		if (copie.locatie != nullptr) {
+			this->locatie = new char[strlen(copie.locatie)];
+			memcpy(this->locatie, locatie, strlen(locatie) + 1);
+		}
+		else {
+			this->locatie = nullptr;
+		}
+		if (copie.burseAlocate != nullptr) {
+			this->burseAlocate = new float[copie.nrDosareAprobat];
+			for (int i = 0; i < copie.nrDosareAprobat; i++) {
+				this->burseAlocate[i] = copie.burseAlocate[i];
+			}
+		}
+		else {
+			this->locatie = nullptr;
+		}
+		if (copie.NrSerii != nullptr) {
+			this->NrSerii = new int[copie.nrstudenti];
+			for (int i = 0; i < copie.nrstudenti; i++) {
+				this->NrSerii[i] = copie.NrSerii[i];
+			}
+		}
+		else {
+			this->NrSerii = nullptr;
+		}
+		if (this->locatie != nullptr) {
+			cout << endl << "Locatie:" << this->locatie;
+		}
+		else {
+			cout << endl << "Locatie e gol.";
+		}
+	}
+	//supraincarcare =
+	void operator=(const universitate& copie) {
+		this->nrstudenti = copie.nrstudenti;
+		this->nrDosareAprobat = copie.nrDosareAprobat;
+		if (this->locatie != nullptr) {
+			this->locatie = nullptr;
+		}
+		if (copie.locatie != nullptr) {
+			this->locatie = new char[strlen(copie.locatie)];
+			memcpy(this->locatie, locatie, strlen(locatie) + 1);
+		}
+		else {
+			this->locatie = nullptr;
+		}
+		if (this->burseAlocate != nullptr) {
+			this->burseAlocate = nullptr;
+		}
+		if (copie.burseAlocate != nullptr) {
+			this->burseAlocate = new float[copie.nrDosareAprobat];
+			for (int i = 0; i < copie.nrDosareAprobat; i++) {
+				this->burseAlocate[i] = copie.burseAlocate[i];
+			}
+		}
+		else {
+			this->locatie = nullptr;
+		}
+		if (this->NrSerii != nullptr) {
+			this->NrSerii = nullptr;
+		}
+		if (copie.NrSerii != nullptr) {
+			this->NrSerii = new int[copie.nrstudenti];
+			for (int i = 0; i < copie.nrstudenti; i++) {
+				this->NrSerii[i] = copie.NrSerii[i];
+			}
+		}
+		else {
+			this->NrSerii = nullptr;
+		}
+	}
+
+	//setter ,getteri pentru atributele alocate dinamic
+	const char* getLocatie() {
+		if (this->locatie != nullptr) {
+			return this->locatie;
+		}
+		else {
+			throw"Eroare .Reintrodu Datele.";
+		}
+	}
+	void setLocatie(const char* nou) {
+		if (this->locatie != nullptr) {
+			this->locatie = nullptr;
+		}
+		this->locatie = new char[strlen(nou) + 1];
+		memcpy(this->locatie, nou, strlen(nou) + 1);
+	}
+
+	//set get pt atributele alocate dinamic ale clasei
+	int getNrstud() {
+
+			return this->nrstudenti;	
+   }
+	void setStud(int stud) {
+		if (this->nrstudenti >0) {
+			this->nrstudenti = stud;
+
+		}
+	}
+	int* getNrserii() {
+		int* serie = new int[this->nrstudenti];
+		for (int i = 0; i < this->nrstudenti; i++) {
+			this->NrSerii[i] = serie[i];
+		}
+		return serie;
+		delete[] serie;
+	}
+	void setserie(int stud,int* Vectnou) {
+		setStud(stud);
+		if (this->NrSerii != nullptr) {
+			this->NrSerii = nullptr;
+		}
+
+		int* nou = new int[this->nrstudenti];
+		for (int i = 0; i < this->nrstudenti; i++) {
+			this->NrSerii[i] = Vectnou[i];
+		}
+		delete[] Vectnou;
+	}
+};
+
+void main() {
+	//creare obiect default
+	universitate nou;
+	//afisare obiect default
+	nou.afisare();
+
+	//initializare vectori pentru ai folosi ca parametrului unui obiect cu parametri
+	float* burse = new float[2] {12000.0f, 12500.0f};
+	int* NrSerii = new int[2] {10, 8};
+	//creare obiect cu parametri
+	universitate ase("ase", 2, "Piata Romana", 2, NrSerii, burse);
+	//afisare obiect cu parametri
+	ase.afisare();
+
+	//bloc try , catch pentru locatie
+	try {
+		ase.setLocatie("");
+	}
+	catch (...) {
+		cout << endl << endl << "Locatie nula.";
+	}
+
+	ase.setStud(2);
+	ase.setLocatie("Bucuresti");
+	cout << endl << "Noua Locatie: " << ase.getLocatie();
+	ase.setserie(2, new int[2] {12, 13});
+	int* serie = ase.getNrserii();
+	for (int i = 0; i < ase.getNrstud(); i++) {
+		cout << endl << "Noua valoare:"<<serie[i];
+	}
+
+	delete[] serie;
+
+
+}
