@@ -1,0 +1,368 @@
+#include<iostream>
+#include<string>
+#include<fstream>
+using namespace std;
+class film {
+private:
+	const string nume;
+	int an = 0;
+	int* nrActori = nullptr;
+	int nrPersonaje = 0;
+	char* regizor;
+	int bileteVandute = 0;
+	float* profit = nullptr;
+	string* denumirePersonaje = nullptr;
+	//int data[3];
+public:
+	film() :nume("nume") {
+
+	}
+	film(string nume, int an, int* nrActori, int nrPersonaje, const char* regizor, int bileteVandute, float* profit, string* denumirePersonaje) :nume(nume) {
+		this->an = an;
+		this->bileteVandute = bileteVandute;
+		this->nrPersonaje = nrPersonaje;
+		this->regizor = new char[strlen(regizor) + 1];
+		memcpy(this->regizor, regizor, strlen(regizor) + 1);
+		this->nrActori = new int[this->nrPersonaje];
+		for (int i = 0; i < this->nrPersonaje; i++) {
+			this->nrActori[i] = nrActori[i];
+		}
+		delete[] nrActori;
+		this->profit = new float[this->bileteVandute];
+		for (int i = 0; i < this->bileteVandute; i++) {
+			this->profit[i] = profit[i];
+		}
+		delete[] profit;
+
+		this->denumirePersonaje = new string[this->nrPersonaje];
+		for (int i = 0; i < this->nrPersonaje; i++) {
+			this->denumirePersonaje[i] = denumirePersonaje[i];
+		}
+		delete[] denumirePersonaje;
+
+	}
+
+	~film() {
+		if (this->nrActori != nullptr) {
+			this->nrActori = nullptr;
+		}
+		if (this->profit != nullptr) {
+			this->profit = nullptr;
+
+		}
+		if (this->denumirePersonaje != nullptr) {
+			this->denumirePersonaje = nullptr;
+		}
+		if (this->regizor != nullptr) {
+			this->regizor != nullptr;
+		}
+	}
+
+	void afisare() {
+		cout << endl << endl << "Nume:" << this->nume;
+		cout << endl << "An:" << this->an;
+		cout << endl << "Bilete Vandute: " << this->bileteVandute;
+		cout << endl << "Nr personaje:" << this->nrPersonaje;
+		if (this->regizor != nullptr) {
+			cout << endl << "Regizor:" << this->regizor;
+		}
+		else {
+			cout << endl << "regizor e gol.";
+		}
+		if (this->profit != nullptr) {
+			for (int i = 0; i < this->bileteVandute; i++) {
+				cout << endl << "Profit:" << this->profit[i];
+			}
+		}
+		else {
+			cout << endl << "profit e null.";
+		}
+		if (this->nrActori != nullptr) {
+			for (int i = 0; i < this->nrPersonaje; i++) {
+				cout << endl << "NrActori:" << this->nrActori[i];
+			}
+		}
+		else {
+			cout << endl << "nrActori e gol.";
+		}
+		if (this->denumirePersonaje != nullptr) {
+			for (int i = 0; i < this->nrPersonaje; i++) {
+				cout << endl << "Denumire Personaje:" << this->denumirePersonaje[i];
+
+			}
+		}
+		else {
+			cout << endl << "denumirePersonaje e gil.";
+		}
+	}
+	friend void operator<<(ostream& out, film s) {
+		out << endl << endl << "Nume:" << s.nume;
+		out << endl << "AN:" << s.an;
+		out << endl << "bilete vandute:" << s.bileteVandute;
+		out << endl << "nrpersonaje:" << s.nrPersonaje;
+		out << endl << (s.regizor != nullptr ? "regizor" + string(s.regizor) : "regizor default");
+		if (s.profit != nullptr) {
+			for (int i = 0; i < s.bileteVandute; i++) {
+				out << endl << "Profit:" << s.profit[i];
+			}
+		}
+		else {
+			out << endl << "profit defualt";
+		}
+		if (s.nrActori != nullptr) {
+			for (int i = 0; i < s.nrPersonaje; i++) {
+				out << endl << "NrActori:" << s.nrActori[i];
+			}
+		}
+		else {
+			out << endl << "nr actori default.";
+		}
+		if (s.denumirePersonaje != nullptr) {
+			for (int i = 0; i < s.nrPersonaje; i++) {
+				out << endl << "DenumirepERSONAJE:" << s.denumirePersonaje[i];
+			}
+		}
+		else {
+			out << endl << "denumirePersonej default.";
+		}
+	}
+
+	friend void operator>>(istream& in, film s){
+		cout << endl << "an:";
+		in >> s.an;
+		cout << endl << "NrPersonaje:";
+		in >> s.nrPersonaje;
+		cout << endl << "BileteVandute:";
+		in >> s.bileteVandute;
+
+		if (s.regizor != nullptr) {
+			s.regizor = nullptr;
+		}
+		char buffer[50];
+		in >> buffer;
+		s.regizor = new char[strlen(buffer) + 1];
+		memcpy(s.regizor, buffer, strlen(buffer) + 1);
+
+		if (s.nrActori != nullptr) {
+			s.nrActori = nullptr;
+		}
+		s.nrActori = new int[s.nrPersonaje];
+	
+		for (int i = 0; i < s.nrPersonaje; i++) {
+			in >> s.nrActori[i];
+		}
+
+		if (s.profit != nullptr) {
+			s.profit = nullptr;
+		}
+		s.profit = new float[s.bileteVandute];
+	
+		for (int i = 0; i < s.bileteVandute; i++) {
+			in >> s.profit[i];
+		}
+
+		if (s.denumirePersonaje != nullptr) {
+			s.denumirePersonaje = nullptr;
+	
+		}
+		s.denumirePersonaje = new string[s.nrPersonaje];
+		for (int i = 0; i < s.nrPersonaje; i++)
+		{
+			in >> s.denumirePersonaje[i];
+		}
+	}
+
+	//intrare,iesire fisier normal
+	friend void operator<<(fstream& outFile, film s) {
+		outFile << endl << endl << "Nume:" << s.nume;
+		outFile << endl << "AN:" << s.an;
+		outFile << endl << "bilete vandute:" << s.bileteVandute;
+		outFile << endl << "nrpersonaje:" << s.nrPersonaje;
+		outFile << endl << (s.regizor != nullptr ? "regizor" + string(s.regizor) : "regizor default");
+		if (s.profit != nullptr) {
+			for (int i = 0; i < s.bileteVandute; i++) {
+				outFile << endl << "Profit:" << s.profit[i];
+			}
+		}
+		else {
+			outFile << endl << "profit defualt";
+		}
+		if (s.nrActori != nullptr) {
+			for (int i = 0; i < s.nrPersonaje; i++) {
+				outFile << endl << "NrActori:" << s.nrActori[i];
+			}
+		}
+		else {
+			outFile << endl << "nr actori default.";
+		}
+		if (s.denumirePersonaje != nullptr) {
+			for (int i = 0; i < s.nrPersonaje; i++) {
+				outFile << endl << "DenumirepERSONAJE:" << s.denumirePersonaje[i];
+			}
+		}
+		else {
+			outFile << endl << "denumirePersonej default.";
+		}
+	}
+
+	friend void operator>>(ifstream& inFile, film s) {
+		cout << endl << "an:";
+		inFile >> s.an;
+		cout << endl << "NrPersonaje:";
+		inFile >> s.nrPersonaje;
+		cout << endl << "BileteVandute:";
+		inFile >> s.bileteVandute;
+
+		if (s.regizor != nullptr) {
+			s.regizor = nullptr;
+		}
+		char buffer[50];
+		inFile >> buffer;
+		s.regizor - new char[strlen(buffer) + 1];
+		memcpy(s.regizor, buffer, strlen(buffer) + 1);
+
+		if (s.nrActori != nullptr) {
+			s.nrActori = nullptr;
+		}
+		s.nrActori = new int[s.nrPersonaje];
+
+		for (int i = 0; i < s.nrPersonaje; i++) {
+			inFile >> s.nrActori[i];
+		}
+
+		if (s.profit != nullptr) {
+			s.profit = nullptr;
+		}
+		s.profit = new float[s.bileteVandute];
+
+		for (int i = 0; i < s.bileteVandute; i++) {
+			inFile >> s.profit[i];
+		}
+
+		if (s.denumirePersonaje != nullptr) {
+			s.denumirePersonaje = nullptr;
+
+		}
+		s.denumirePersonaje = new string[s.nrPersonaje];
+		for (int i = 0; i < s.nrPersonaje; i++)
+		{
+			inFile >> s.denumirePersonaje[i];
+		}
+	}
+
+	film(const film& copie) :nume(copie.nume) {
+		this->an = an;
+		this->bileteVandute = bileteVandute;
+		this->nrPersonaje = nrPersonaje;
+		if (copie.regizor != nullptr) {
+			this->regizor = new char[strlen(copie.regizor)+1];
+			memcpy(this->regizor, copie.regizor, strlen(copie.regizor) + 1);
+		}
+		else {
+			this->regizor = nullptr;
+		}
+		if (copie.nrActori != nullptr) {
+			this->nrActori = new int[copie.nrPersonaje];
+			for (int i = 0; i < copie.nrPersonaje; i++) {
+				this->nrActori[i] = nrActori[i];
+			}
+		}
+		else {
+			this->nrActori=nullptr;
+		}
+		if (copie.profit != nullptr) {
+			this->profit = new float[copie.bileteVandute];
+			for (int i = 0; i < copie.bileteVandute; i++) {
+				this->profit[i] = profit[i];
+			}
+		}
+		else {
+			this->profit = nullptr;
+		}
+		if (copie.denumirePersonaje != nullptr) {
+			this->denumirePersonaje = new string[copie.nrPersonaje];
+			for (int i = 0; i < copie.nrPersonaje; i++) {
+				this->denumirePersonaje[i] = copie.denumirePersonaje[i];
+			}
+		}
+		else {
+			this->denumirePersonaje = nullptr;
+		}
+	}
+
+
+	void operator=(const film& copie) {
+		this->an = an;
+		this->bileteVandute = bileteVandute;
+		this->nrPersonaje = nrPersonaje;
+		if (this->regizor != nullptr) {
+			this->regizor = nullptr;
+		}
+		if (copie.regizor != nullptr) {
+			this->regizor = new char[strlen(copie.regizor) + 1];
+			memcpy(this->regizor, copie.regizor, strlen(copie.regizor) + 1);
+		}
+		else {
+			this->regizor = nullptr;
+		}
+		if (this->nrActori != nullptr) {
+			this->nrActori = nullptr;
+		}
+		if (copie.nrActori != nullptr) {
+			this->nrActori = new int[copie.nrPersonaje];
+			for (int i = 0; i < copie.nrPersonaje; i++) {
+				this->nrActori[i] = nrActori[i];
+			}
+		}
+		else {
+			this->nrActori = nullptr;
+		}
+		if (this->profit != nullptr) {
+			this->profit != nullptr;
+		}
+		if (copie.profit != nullptr) {
+			this->profit = new float[copie.bileteVandute];
+			for (int i = 0; i < copie.bileteVandute; i++) {
+				this->profit[i] = profit[i];
+			}
+		}
+		else {
+			this->profit = nullptr;
+		}
+		if (this->denumirePersonaje != nullptr) {
+			this->denumirePersonaje = nullptr;
+		}
+		if (copie.denumirePersonaje != nullptr) {
+			this->denumirePersonaje = new string[copie.nrPersonaje];
+			for (int i = 0; i < copie.nrPersonaje; i++) {
+				this->denumirePersonaje[i] = copie.denumirePersonaje[i];
+			}
+		}
+		else {
+			this->denumirePersonaje = nullptr;
+		}
+	}
+	
+	
+};
+void main() {
+	int* actorii = new int[1] {12};
+	float* profit =new float[1] {1234.0f};
+	string* den = new string[1]{ "leonardo dicaprio" };
+	film filmul("titanic", 2019, actorii, 1, "ion", 1, profit, den);
+	filmul.afisare();
+	
+	delete[] actorii, profit, den;
+	fstream fileStream("pregatire.txt", ios::out);
+	fileStream << filmul;
+	fileStream.close();
+
+	fstream inputfileStream("pregatire.txt", ios::in);
+	inputfileStream << filmul;
+	fileStream.close();
+
+	film fd;
+	
+
+
+}
