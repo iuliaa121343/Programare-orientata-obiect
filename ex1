@@ -1,0 +1,606 @@
+#include<iostream>
+#include<string>
+using namespace std;
+#include<fstream>
+
+class Abstracta {
+	int returnare = 0;
+};
+class apartament{
+private:
+	const string nume;
+	int nrCamere=0;
+	char* locatie = nullptr;
+	int* etaje = nullptr;
+	float* pret = nullptr;
+	int vechime = 0;
+	string* denumireLocatari = nullptr;
+	bool SuntCamerelePline = false;
+public:
+	apartament() :nume("necunoscut") {
+
+	}
+	apartament(string numeA,const char* locatie,float* pret,string* denumireLocatari,int* etaje,int vechime,int nrCamere,bool SuntCamerelePLine) :nume(numeA) {
+		this->nrCamere = nrCamere;
+		this->vechime = vechime;
+		this->SuntCamerelePline = SuntCamerelePline;
+		this->locatie = new char[strlen(locatie) + 1];
+			memcpy(this->locatie, locatie, strlen(locatie) + 1);
+		
+
+		this->etaje = new int[this->nrCamere];
+		for (int i = 0; i < this->nrCamere; i++) {
+			this->etaje[i] = etaje[i];
+		}
+		delete[] etaje;
+
+		this->pret = new float[this->vechime];
+		for (int i = 0; i < this->vechime; i++) {
+			this->pret[i] = pret[i];
+		}
+		
+		this->denumireLocatari = new string[this->nrCamere];
+		for (int i = 0; i < this->nrCamere; i++) {
+			this->denumireLocatari[i] = denumireLocatari[i];
+		}
+	
+	}
+	void afisare() {
+		cout << endl << endl << "Nume:" << this->nume;
+		cout << endl << "Nr camere:" << this->nrCamere;
+		cout << endl << "Vechime:" << this->vechime;
+		if (this->SuntCamerelePline) {
+			cout << endl << "Da,sunt pline";
+		}
+		else {
+			cout << endl << "Nu sunt pline.";
+		}
+		if (this->locatie != nullptr) {
+			cout << endl << "Locatie:"<<this->locatie;
+		}
+		else {
+			cout << endl << "locatie  e gol.";
+		}
+		if (this->etaje != nullptr) {
+			for (int i = 0; i < this->nrCamere; i++) {
+				cout << endl << "Nr etaje:" << this->etaje[i];
+			}
+		}
+		else {
+			cout << endl << "Etaje e gol.";
+		}
+		if (this->pret != nullptr) {
+			for (int i = 0; i < this->vechime; i++) {
+				cout << endl << "NrPert:" << this->pret[i];
+			}
+		}
+		else {
+			cout << endl << "pret e gol.";
+		}
+		if (this->denumireLocatari != nullptr) {
+			for (int i = 0; i < this->nrCamere; i++) {
+				cout << endl << "Denumire Locatari:" << this->denumireLocatari[i];
+			}
+		}
+		else {
+			cout << endl << "Denumire Locatari e gol.";
+		}
+	}
+
+	~apartament() {
+		if (this->locatie != nullptr) {
+			this->locatie = nullptr;
+		}
+		if (this->etaje != nullptr) {
+			this->etaje = nullptr;
+
+		}
+		if (this->denumireLocatari != nullptr) {
+			this->denumireLocatari = nullptr;
+		}
+		if (this->pret != nullptr) {
+			this->pret = nullptr;
+		}
+	}
+	apartament(const apartament& copie) :nume(copie.nume) {
+		this->vechime = copie.vechime;
+		this->nrCamere = copie.nrCamere;
+		this->SuntCamerelePline = copie.SuntCamerelePline;
+		if (copie.locatie != nullptr) {
+			this->locatie = new char[strlen(copie.locatie) + 1];
+			memcpy(this->locatie, copie.locatie, strlen(copie.locatie) + 1);
+		}
+		else {
+			this->locatie = nullptr;
+		}
+		if (copie.pret != nullptr) {
+			this->pret = new float[this->vechime];
+			for (int i = 0; i < this->vechime; i++) {
+				this->pret[i] = copie.pret[i];
+			}
+		}
+		else {
+			this->pret = nullptr;
+		}
+		if (copie.etaje != nullptr) {
+			this->etaje = new int[this->nrCamere];
+			for (int i = 0; i < this->nrCamere; i++) {
+				this->etaje[i] = copie.etaje[i];
+			}
+		}
+		else{
+				this->etaje = nullptr;
+		}
+		if (copie.denumireLocatari != nullptr) {
+			this->denumireLocatari = new string[this->nrCamere];
+			for (int i = 0; i < this->nrCamere; i++) {
+				this->denumireLocatari[i] = copie.denumireLocatari[i];
+
+			}
+		}
+		else {
+			this->denumireLocatari = nullptr;
+		}
+	}
+
+	void operator=(const apartament& copie) {
+		this->vechime = copie.vechime;
+		this->nrCamere = copie.nrCamere;
+		this->SuntCamerelePline = copie.SuntCamerelePline;
+		if (this->locatie != nullptr) {
+			this->locatie != nullptr;
+		}
+		if (copie.locatie != nullptr) {
+			this->locatie = new char[strlen(copie.locatie) + 1];
+			memcpy(this->locatie, copie.locatie, strlen(copie.locatie) + 1);
+		}
+		else {
+			this->locatie = nullptr;
+		}
+		if (this->pret != nullptr) {
+			this->pret = nullptr;
+		}
+
+		if (copie.pret != nullptr) {
+			this->pret = new float[this->vechime];
+			for (int i = 0; i < this->vechime; i++) {
+				this->pret[i] = copie.pret[i];
+			}
+		}
+		else {
+			this->pret = nullptr;
+		}
+		if(this->etaje != nullptr) {
+			this->etaje = nullptr;
+		}
+		if (copie.etaje != nullptr) {
+			this->etaje = new int[this->nrCamere];
+			for (int i = 0; i < this->nrCamere; i++) {
+				this->etaje[i] = copie.etaje[i];
+			}
+		}
+		else {
+			this->etaje = nullptr;
+		}
+		if (this->denumireLocatari != nullptr) {
+			this->denumireLocatari = nullptr;
+		}
+		if (copie.denumireLocatari != nullptr) {
+			this->denumireLocatari = new string[this->nrCamere];
+			for (int i = 0; i < this->nrCamere; i++) {
+				this->denumireLocatari[i] = copie.denumireLocatari[i];
+
+			}
+		}
+		else {
+			this->denumireLocatari = nullptr;
+		}
+	}
+	friend void operator<<(ostream& out, apartament a) {
+		out << endl << endl << "Nume:" << a.nume;
+		out << endl << "Vechime:" << a.vechime;
+		out << endl << "NrCamwere:" << a.nrCamere;
+		out << endl << (a.SuntCamerelePline ? "Da sunt pline" : "nu sunt pline");
+		out << endl << (a.locatie != nullptr ? "locatie" + string(a.locatie) : "locatie default");
+		if (a.pret != nullptr) {
+			for (int i = 0; i < a.vechime; i++) {
+				out << endl << "Pret:" << a.pret[i];
+			}
+		}
+		else {
+			out << endl << "pret default";
+		}
+		if (a.etaje != nullptr) {
+			for (int i = 0; i < a.nrCamere;i++) {
+				out << endl << "Etaje:" << a.etaje[i];
+			}
+		}
+		else {
+			out << endl << "etaje default.";
+		}
+		if (a.denumireLocatari != nullptr) {
+			for (int i = 0; i < a.nrCamere; i++) {
+				out << endl << "Den. Locatari:" << a.denumireLocatari[i];
+			}
+		}
+		else {
+			out << endl << "Locatie default";
+		}
+	}
+	friend void operator>>(istream& in, apartament a) {
+		cout << endl << "NrCamere:";
+		in >> a.nrCamere;
+		cout << endl << "Vechime:";
+		in >> a.vechime;
+		if (a.locatie != nullptr) {
+			a.locatie = nullptr;
+		}
+		char buffer[50];
+		in >> buffer;
+		a.locatie = new char[strlen(buffer) + 1];
+		memcpy(a.locatie, buffer, strlen(buffer) + 1);
+
+		string SuntCamerePline;
+		in >> SuntCamerePline;
+		a.SuntCamerelePline = (SuntCamerePline == "y" ? true : false);
+		if (a.pret != nullptr) {
+			a.pret = nullptr;
+		}
+		a.pret = new float[a.vechime];
+		cout << endl << "Pret:";
+		for (int i = 0; i < a.vechime; i++) {
+			in >> a.pret[i];
+		}
+
+		if (a.etaje != nullptr) {
+			a.etaje = nullptr;
+		}
+		a.etaje = new int[a.nrCamere];
+		cout << endl << "NrCamere:";
+		for (int i = 0; i < a.nrCamere;i++) 
+		{
+			in >> a.etaje[i];
+		}
+
+		if (a.denumireLocatari != nullptr) {
+			a.denumireLocatari = nullptr;
+		}
+		a.denumireLocatari = new string[a.nrCamere];
+		cout << endl << "DenumireLocatari:";
+		for (int i = 0; i < a.nrCamere; i++) {
+			in >> a.denumireLocatari[i];
+		}
+
+
+	}
+
+	friend void operator<<(fstream& out, apartament a) {
+		out << endl << endl << "Nume:" << a.nume;
+		out << endl << "Vechime:" << a.vechime;
+		out << endl << "NrCamwere:" << a.nrCamere;
+		out << endl << (a.SuntCamerelePline ? "Da sunt pline" : "nu sunt pline");
+		out << endl << (a.locatie != nullptr ? "locatie" + string(a.locatie) : "locatie default");
+		if (a.pret != nullptr) {
+			for (int i = 0; i < a.vechime; i++) {
+				out << endl << "Pret:" << a.pret[i];
+			}
+		}
+		else {
+			out << endl << "pret default";
+		}
+		if (a.etaje != nullptr) {
+			for (int i = 0; i < a.nrCamere; i++) {
+				out << endl << "Etaje:" << a.etaje[i];
+			}
+		}
+		else {
+			out << endl << "etaje default.";
+		}
+		if (a.denumireLocatari != nullptr) {
+			for (int i = 0; i < a.nrCamere; i++) {
+				out << endl << "Den. Locatari:" << a.denumireLocatari[i];
+			}
+		}
+		else {
+			out << endl << "Locatie default";
+		}
+	}
+	friend void operator>>(ifstream& in, apartament a) {
+		cout << endl << "NrCamere:";
+		in >> a.nrCamere;
+		cout << endl << "Vechime:";
+		in >> a.vechime;
+		if (a.locatie != nullptr) {
+			a.locatie = nullptr;
+		}
+		char buffer[50];
+		in >> buffer;
+		a.locatie = new char[strlen(buffer) + 1];
+		memcpy(a.locatie, buffer, strlen(buffer) + 1);
+
+		string SuntCamerePline;
+		in >> SuntCamerePline;
+		a.SuntCamerelePline = (SuntCamerePline == "y" ? true : false);
+		if (a.pret != nullptr) {
+			a.pret = nullptr;
+		}
+		a.pret = new float[a.vechime];
+		cout << endl << "Pret:";
+		for (int i = 0; i < a.vechime; i++) {
+			in >> a.pret[i];
+		}
+
+		if (a.etaje != nullptr) {
+			a.etaje = nullptr;
+		}
+		a.etaje = new int[a.nrCamere];
+		cout << endl << "NrCamere:";
+		for (int i = 0; i < a.nrCamere; i++)
+		{
+			in >> a.etaje[i];
+		}
+
+		if (a.denumireLocatari != nullptr) {
+			a.denumireLocatari = nullptr;
+		}
+		a.denumireLocatari = new string[a.nrCamere];
+		cout << endl << "DenumireLocatari:";
+		for (int i = 0; i < a.nrCamere; i++) {
+			in >> a.denumireLocatari[i];
+		}
+
+
+	}
+
+	//set ,get
+	int getCamere() {
+		return this->nrCamere;
+	}
+	void setCamere(int nou) {
+		if (nou >= 0) {
+			this->nrCamere = nou;
+		}
+
+	}
+	string* getDenumire() {
+		string* den = new string[this->nrCamere];
+		for (int i = 0; i < this->nrCamere; i++) {
+			den[i] = this->denumireLocatari[i];
+		}
+		return den;
+	}
+
+	void setDenumire(int nou, string* vector) {
+		setCamere(nou);
+		if (this->denumireLocatari != nullptr) {
+			this->denumireLocatari = nullptr;
+		}
+		this->denumireLocatari = new string[this->nrCamere];
+		for (int i = 0; i < nrCamere; i++) {
+			this->denumireLocatari[i] = vector[i];
+		}
+		delete[] vector;
+	}
+
+	int* getEtaje() {
+		int* et = new int[this->nrCamere];
+		for (int i = 0; i < this->nrCamere; i++) {
+			et[i] = this->etaje[i];
+		}
+		return et;
+	}
+	void setEtaje(int nou, int* vectorul) {
+		setCamere(nou);
+		if (this->etaje != nullptr) {
+			this->etaje = nullptr;
+		}
+		this->etaje = new int[this->nrCamere];
+		for(int i = 0; i < this->nrCamere; i++) {
+			this->etaje[i] = vectorul[i];
+		}
+		delete[] vectorul;
+
+	}
+	int getVechime() {
+		return this->vechime;
+	}
+	void setVechime(int nouV) {
+		if (nouV >= 0) {
+			this->vechime = nouV;
+		}
+	}
+	float* getPret() {
+		float* preturi = new float[this->vechime];
+		for (int i = 0; i < this->vechime; i++) {
+			preturi[i] = this->pret[i];
+		}
+		return preturi;
+	}
+	void setPret(int nou, float* vectorP) {
+		setVechime(nou);
+		if (this->pret != nullptr) {
+			this->pret = nullptr;
+		}
+		this->pret = new float[this->vechime];
+		for (int i = 0; i < this->vechime; i++) {
+			this->pret[i] = vectorP[i];
+		}
+		delete[] vectorP;
+	}
+
+	bool operator>(apartament a) {
+		return this->nrCamere > a.nrCamere;
+	}
+	int operator()(int val) {
+		return this->nrCamere + val;
+	}
+	char& operator[](int index) {
+		if (index >= 0 && index < strlen(this->locatie)) {
+			return this->locatie[index];
+		}
+	}
+	
+	void operator+(int extra){
+	    this->nrCamere += extra;
+	}
+	void operator-(int val) {
+		this->nrCamere -= val;
+	}
+	explicit operator int() {
+		return this->nrCamere;
+	}
+	
+};
+
+//has a
+class complexApartamente {
+private:
+	apartament* colectie= nullptr;;
+	int nr = 0;
+public:
+	complexApartamente() {
+
+	}
+	complexApartamente(int nr,apartament* vectorNou) {
+		this->nr = nr;
+		this->colectie = new apartament[this->nr];
+		for (int i = 0; i < this->nr; i++) {
+			this->colectie[i] = apartament(vectorNou[i]);
+		}
+		delete[] vectorNou;
+	}
+	~complexApartamente() {
+		if (this->colectie != nullptr) {
+			this->colectie = nullptr;
+		}
+	}
+	apartament& operator[](int index) {
+		if (index >= 0 && index < this->nr) {
+			return this->colectie[index];
+		}
+	}
+	complexApartamente(const complexApartamente& copie) {
+		this->nr = copie.nr;
+		if (copie.colectie != nullptr) {
+			this->colectie = new apartament[this->nr];
+			for (int i = 0; i < this->nr; i++) {
+				this->colectie[i] = copie.colectie[i];
+			}
+		}
+		else {
+			this->colectie = nullptr;
+		}
+
+	}
+	int getNr() {
+		return this->nr;
+
+	}
+	void setNr(int nou) {
+		if (nou >= 0) {
+			this->nr = 0;
+		}
+	}
+	apartament* getColectie() {
+		apartament* col = new apartament[this->nr];
+		for (int i = 0; i < this->nr; i++) {
+			col[i] = this->colectie[i];
+		}
+		return col;
+	}
+	void setColectie(int nou, apartament* vectorNou) {
+		setNr(nou);
+		if (this->colectie != nullptr) {
+			this->colectie = nullptr;
+		}
+		this->colectie = new apartament[this->nr];
+		for (int i = 0; i < this->nr; i++) {
+			this->colectie[i] = vectorNou[i];
+		}
+		delete[] vectorNou;
+	}
+
+
+	
+
+
+	
+};
+void main() {
+	float* pret = new float[2] {1233.0f, 12343.0f};
+	string* den = new string[2]{ "ion","ana"};
+	int* et = new int[2] {2, 4};
+	apartament ap("Bloc A", "Piata Romana", pret, den, et, 2, 2, true);
+	ap.afisare();
+	apartament ep;
+	ep = ap;
+
+	ep.afisare();
+
+	
+	fstream File("apartament.txt", ios::out);
+	File << ap;
+	File.close();
+
+	fstream FileIn("apartament.txt", ios::in);
+	FileIn >> ap;
+	FileIn.close();
+
+
+	ap.setCamere(1);
+	ap.setDenumire(1, new string[1]{ "Denis " });
+	string* vect = ap.getDenumire();
+	for (int i = 0; i < ap.getCamere(); i++) {
+		cout << endl <<"Nou:"<< vect[i];
+	}
+	delete[] vect;
+
+	ap.setEtaje(1, new int[1] {4});
+	int* etaj = ap.getEtaje();
+	for (int i = 0; i < ap.getCamere(); i++) {
+		cout << endl << "Noi etaje:" << etaj[i];
+	}
+	delete[] etaj;
+
+	ap.setVechime(1);
+	ap.setPret(1, new float[1] {2300.0f});
+	float* preturi = ap.getPret();
+	for (int i = 0; i < ap.getVechime(); i++) {
+		cout << endl << "Preturi Noi"<<preturi[i];
+	}
+	delete[] preturi;
+
+
+	ep.setCamere(1);
+	if (ep > ap) {
+		cout << endl<<endl << "Obiectul ep are mai multe camere decat obiectul ap";
+	}
+	else {
+		cout << endl<<endl << "Obiectul ap are mai multe camere decat obiectul ep.";
+	}
+	cout << endl << ep(2);
+	cout << endl << ap[4];
+
+
+	 ap + 9;
+	 cout << endl << ap.getCamere();
+	  
+	  cout << endl << ap.getCamere();
+
+	  apartament grozavesti("Bloc Grozavesti", "Grozavesti", pret, den, etaj, 2, 2, true);
+	  apartament crangasi("Bloc Crangasi", "Crangasi", pret, den, etaj, 2, 2, false);
+	  int nr = 2;
+	  complexApartamente complex(nr, new apartament[2]{ grozavesti,crangasi });
+	  complexApartamente cp = complex;
+
+	 
+	  cout << endl << "=========Afisare Colectie========";
+	  for (int i = 0; i < nr; i++) {
+		  cout << endl << i << cp[i];
+	}
+
+	  int nrAngaj = int(ep);
+	  cout << endl << nrAngaj;
+	
+
+}
