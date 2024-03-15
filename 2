@@ -1,0 +1,123 @@
+#include<iostream>
+#include<string>
+using namespace std;
+class activitate {
+private:
+	const int id;
+	char* denumire = nullptr;
+	int ora=0;
+	int durata = 0;
+	static int nr;
+public:
+	activitate() :id(++nr){
+
+	}
+	activitate(const char* denumire,int ora,int durata) :id(++nr){
+		this->ora = ora;
+		this->durata = durata;
+		this->denumire = new char[strlen(denumire) + 1];
+		memcpy(this->denumire, denumire, strlen(denumire) + 1);
+	}
+	~activitate() {
+		if(this->denumire!=nullptr){
+			delete[] denumire;
+		}
+	}
+	void afisare() {
+		cout << endl << endl << "Id:" << this->id;
+		cout << endl  << "ora:" << this->ora;
+		cout << endl << "Durata:" << this->durata << "min";
+		if (this->denumire!= nullptr) {
+			cout << endl << "denumire activitate:" << this->denumire;
+		}
+		else {
+			cout << endl << "DEnumire default;";
+		}
+	}
+	friend void operator<<(ostream& out, activitate a) {
+		out << endl << endl << "id:" << a.id;
+		out << endl << "ora:" << a.ora;
+		out << endl << "durata:" << a.durata;
+		out << endl << (a.denumire != nullptr ? "denumire" + string(a.denumire) : "denumire default");
+	}
+	activitate(const activitate& a) :id(a.id) {
+		this->ora = a.ora;
+		this->durata = a.durata;
+		if (a.denumire != nullptr) {
+			this->denumire = new char[strlen(a.denumire) + 1];
+			memcpy(this->denumire, a.denumire, strlen(a.denumire) + 1);
+		}
+		else {
+			this->denumire = nullptr;
+		}
+	}
+
+	void operator=(const activitate& a) {
+		this->ora = a.ora;
+		this->durata = a.durata;
+		if (this->denumire != nullptr) {
+			this->denumire = nullptr;
+		}
+		if (a.denumire != nullptr) {
+			this->denumire = new char[strlen(a.denumire) + 1];
+			memcpy(this->denumire, a.denumire, strlen(a.denumire) + 1);
+		}
+		else {
+			this->denumire = nullptr;
+		}
+	}
+	
+
+	int getOra() {
+		return this->ora;
+	}
+	void setOra(int nou) {
+		if (nou >= 0) {
+			this->ora = nou;
+		}
+	}
+	static int getNr() {
+		return nr;
+	}
+	bool operator>(const activitate& a) {
+		return this->ora > a.ora;
+	}
+
+	int operator()(int extra) {
+		return this->ora + extra;
+	}
+	void operator*=(int nou) {
+	 this->ora * nou;
+	}
+
+	char& operator[](int index) {
+		if (index > 0 && index < strlen(this->denumire)) {
+			return this->denumire[index];
+		}
+	}
+};
+int activitate::nr = 0;
+void main() {
+	activitate act("denu", 12, 30);
+	activitate actib;
+	act.afisare();
+
+	act.setOra(1);
+	cout << endl << act.getOra();
+
+	cout << endl << act.getNr();
+
+	actib = act;
+
+	activitate(copie);
+	copie.afisare();
+	if (actib > act) {
+		cout << endl << "activ dureaza mai mult decat act";
+	}
+	else {
+		cout << "act dureaza mai mult decat actib";
+	}
+	cout << endl << act(3);
+	actib[1]='m';
+	actib.afisare();
+}
